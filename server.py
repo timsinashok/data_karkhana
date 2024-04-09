@@ -29,8 +29,8 @@ def send_file(ip, port):
             print("Requested file does not exist")
 
 # Server 1 IP and port
-server1_ip = "192.168.1.100"
-server1_port = 8080
+server1_ip = "172.20.10.4"
+server1_port = 12349
 
 # Start Server 1
 send_file(server1_ip, server1_port)
