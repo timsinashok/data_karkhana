@@ -68,7 +68,6 @@ class uploader:
             os.makedirs(dest_path)
 
         filename = os.path.splitext(file_name)[0]
-        print(filename)
 
         for index, chunk in chunks:
             with open(os.path.join(dest_path, f"{filename}_{index}.txt"), 'wb') as chunk_file:
@@ -98,8 +97,6 @@ class uploader:
         parts = response.split()
         num_chunks = parts[1]
 
-        print(num_chunks)
-
         self.divide_file_into_chunks(file_path, int(num_chunks))
         tracker_socket.close()
 
@@ -108,15 +105,14 @@ class uploader:
         sender_socket.listen(5)
 
         for i in range(int(num_chunks)-1):
-            print(f"starting send{i}")
 
             while True:        
                 client_socket, client_address = sender_socket.accept()
-                print(f"connection accepted from {client_address}")
+                print(f"Connection accepted from {client_address}")
                 response = client_socket.recv(1024).decode()
                 if response:
                     break
-            print("response from peer =", response)
+            print("Request from peer =", response)
             send_attributes = response.split()
             self.send_file_chunk(send_attributes[1], client_socket)
             client_socket.close()
