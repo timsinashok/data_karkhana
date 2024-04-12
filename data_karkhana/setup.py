@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='datakarkhana',  # Replace 'your_package' with the name of your package
-    version='0.3',
+    version='0.2',
     description='A peer-to-peer file sharing system',
     long_description='Datakarkhana is a peer-to-peer file sharing system which works on a hybrid peer-to-peer and client-server model. ',
     long_description_content_type='text/markdown',
@@ -23,7 +23,7 @@ setup(
     python_requires='>=3.6, <4',
     install_requires=[],  # Add any dependencies your package requires
     entry_points = {
-        'console_scripts': ['datakarkhana=data_karkhana:main'],
+        'console_scripts': ['datakarkhana=DataKarkhana:main'],
     },
     project_urls={
         'Bug Reports': 'https://github.com/timsinashok/data_karkhana/issues',  # Replace with the URL for issue tracking
