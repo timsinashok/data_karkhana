@@ -3,6 +3,7 @@ import Tracker
 import Peer
 import Uploader
 import Downloader
+import socket
 
 def main():
     print("Choose a role:")
@@ -28,29 +29,46 @@ def main():
 
     elif role_choice == "2":
         alice_instance = Uploader.uploader()
-        host = input("Please input your IP address properly: ")  # Replace with the actual IP address of the receiver machine
-        port = int(input("Please enter your port number: "))
+
+        # host = input("Please input your IP address properly: ")  # Replace with the actual IP address of the receiver machine
+        # port = int(input("Please enter your port number: "))
+
+        host = get_ip()
+        port = 12345
         file_path = input("Enter the name of the file you want to upload (for default, type: test.txt): ")
         peer_id = input("Enter your peer ID: ")
         alice_instance.send_file( peer_id, host, port, tracker_host, tracker_port, file_path)
         alice_instance.connect_and_receive_response(peer_id, host, port+1, tracker_host, tracker_port)
 
     elif role_choice == "3":
-        host = input("Please input your IP address properly: ")  # Replace with the actual IP address of the receiver machine
-        port = int(input("Please enter your port number: "))
+
+        host = get_ip()
+        port = 12345
+
+        # host = input("Please input your IP address properly: ")  # Replace with the actual IP address of the receiver machine
+        # port = int(input("Please enter your port number: "))
         peer_id = input("Enter your peer ID (any string to recognize you over network): ")
         downloader = Downloader.Downloader(peer_id, host, port, tracker_host, tracker_port)
         downloader.connect_and_receive_response()
 
     elif role_choice == "4":
-        host = input("Please input your IP address properly: ")  # Replace with the actual IP address of the receiver machine
-        port = int(input("Please enter your port number: "))
+
+        host = get_ip()
+        port = 12345
+
+        # host = input("Please input your IP address properly: ")  # Replace with the actual IP address of the receiver machine
+        # port = int(input("Please enter your port number: "))
         peer_id = input("Enter your peer ID (any string to recognize you over network): ")
         file_handler = Peer.FileTransferHandler(peer_id, host, port, tracker_host, tracker_port)
         file_handler.connect_and_receive_response()
 
     else:
         print("Invalid choice. Please choose a valid option.")
+
+def get_ip():
+    hostname = socket.gethostname()    
+    ip_address = socket.gethostbyname(hostname)
+    return ip_address
 
 if __name__ == "__main__":
     main()
