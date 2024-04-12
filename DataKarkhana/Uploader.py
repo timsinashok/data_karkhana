@@ -7,7 +7,8 @@ class uploader:
 
     def send_file_chunk(self, file_name, client_socket):
         chunk_size = 1024
-        file_path = f"downloads/{file_name}"
+        dest_path = 'downloads'
+        file_path = os.path.join(dest_path, file_name)
         with open(file_path, 'rb') as file:
             while True:
                 chunk = file.read(chunk_size)
@@ -40,18 +41,20 @@ class uploader:
 
     def send_file_to_peer(self, peer_socket, filename):
         try:
-            file_path = f"downloads/{filename}"
+            file_path = f"/Users/yaghyesh/dev/data_karkhana/DataKarkhana/downloads/{filename}"
             with open(file_path, 'rb') as file:
                 file_data = file.read()
                 peer_socket.sendall(file_data)
         except FileNotFoundError:
             peer_socket.sendall(b"File not found")
 
-    def divide_file_into_chunks(self, file_path, num_chunks):
-        chunks = []
+    def divide_file_into_chunks(self, file_name, num_chunks):
         dest_path = 'downloads'
+        file_path = os.path.join(dest_path, file_name)
         file_size = os.path.getsize(file_path)
         chunk_size = int(file_size / num_chunks) + 1
+
+        chunks = []
         with open(file_path, 'rb') as file:
             index = 0
             while True:
@@ -60,17 +63,18 @@ class uploader:
                     break
                 chunks.append((index, chunk))
                 index += 1
+        
         if not os.path.exists(dest_path):
             os.makedirs(dest_path)
-        
-        filename = os.path.splitext(file_path)[0]
+
+        filename = os.path.splitext(file_name)[0]
         print(filename)
 
         for index, chunk in chunks:
             with open(os.path.join(dest_path, f"{filename}_{index}.txt"), 'wb') as chunk_file:
                 chunk_file.write(chunk)
 
-    def send_file(self, peer_id, host, port, tracker_host, tracker_port, file_path = "test.txt"):
+    def send_file(self, peer_id, host, port, tracker_host, tracker_port,file_path):
         file_name = os.path.basename(file_path)
         tracker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         tracker_socket.connect((tracker_host, tracker_port))
@@ -96,16 +100,16 @@ class uploader:
 
         print(num_chunks)
 
-        self.divide_file_into_chunks(file_name, int(num_chunks))
+        self.divide_file_into_chunks(file_path, int(num_chunks))
         tracker_socket.close()
 
         sender_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sender_socket.bind((host, port))
         sender_socket.listen(5)
-        
+
         for i in range(int(num_chunks)-1):
             print(f"starting send{i}")
-            
+
             while True:        
                 client_socket, client_address = sender_socket.accept()
                 print(f"connection accepted from {client_address}")
@@ -162,5 +166,3 @@ class uploader:
 
         except Exception as e:
             print("An error occurred:", e)
-
-
