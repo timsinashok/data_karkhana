@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='datakarkhana',  # Replace 'your_package' with the name of your package
-    version='0.0.1',
+    version='0.0.2',
     description='A peer-to-peer file sharing system',
     long_description='Datakarkhana is a peer-to-peer file sharing system which works on a hybrid peer-to-peer and client-server model. ',
     long_description_content_type='text/markdown',
