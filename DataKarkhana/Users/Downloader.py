@@ -73,13 +73,11 @@ class Downloader:
     def compile_files(directory, filename):
         # List all files in the directory
         files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
-
         # Sort files by their numerical suffix
         files.sort(key=lambda x: int(x.split('_')[-1].split('.')[0]))
-
+        print("everywhere")
         # Compile files in order
         compiled_content = ''
-        print("Alredy arrived here")
         for file in files:
             with open(os.path.join(directory, file), 'r') as f:
                 compiled_content += f.read()
