@@ -23,7 +23,7 @@ setup(
     python_requires='>=3.6, <4',
     install_requires=[],  # Add any dependencies your package requires
     entry_points = {
-        'console_scripts': ['datakarkhana=DataKarkhana:main'],
+        'console_scripts': ['datakarkhana=data_karkhana:main'],
     },
     project_urls={
         'Bug Reports': 'https://github.com/timsinashok/data_karkhana/issues',  # Replace with the URL for issue tracking
