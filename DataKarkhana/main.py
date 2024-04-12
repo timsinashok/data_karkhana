@@ -1,8 +1,8 @@
 import sys
-import Tracker
-import Peer
-import Uploader
-import Downloader
+import data_karkhana.DataKarkhana.Users.Tracker as Tracker
+import data_karkhana.DataKarkhana.Users.Peer as Peer
+import data_karkhana.DataKarkhana.Users.Uploader as Uploader
+import data_karkhana.DataKarkhana.Users.Downloader as Downloader
 import socket
 
 def main():
@@ -66,9 +66,9 @@ def main():
         print("Invalid choice. Please choose a valid option.")
 
 def get_ip():
-    hostname = socket.gethostname()    
-    ip_address = socket.gethostbyname(hostname)
-    return ip_address
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(('8.8.8.8', 1))  # connect() for UDP doesn't send packets
+    return s.getsockname()[0]
 
 if __name__ == "__main__":
     main()
