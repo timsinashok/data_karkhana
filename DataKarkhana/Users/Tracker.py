@@ -9,6 +9,7 @@ class Tracker:
         self.peers = {}
         self.files = {}
 
+    # This method starts the tracker
     def start(self):
         self.tracker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tracker_socket.bind((self.host, self.port))
@@ -40,7 +41,8 @@ class Tracker:
 
             conn.close()
 
-    def _register_peer(self, data):
+
+    def _register_peer(self, data):# This method registers a peer with the tracker
         parts = data.split()
         peer_id = parts[1]
         ip = parts[2]
@@ -48,7 +50,7 @@ class Tracker:
         self.peers[peer_id] = (ip, port)
         print(f"Registered peer {peer_id} at {ip}:{port}")
 
-    def _share_file(self, data, conn):
+    def _share_file(self, data, conn):# This method shares a file with other peers
         parts = data.split()
         peer_id = parts[2]
         file_name = parts[1]
@@ -58,14 +60,14 @@ class Tracker:
         print(f"File {file_name} shared by sender {sender_ip}:{sender_port}")
 
         num_peers = len(self.peers)
-        conn.sendall(f"NUMBER_OF_PEERS {num_peers}".encode())
+        conn.sendall(f"NUMBER_OF_PEERS {num_peers}".encode())# Send the number of peers to the sender
 
-        file = file_name.split('.')[0]
+        file = file_name.split('.')[0]# Get the file name without the extension
         extension = file_name.split('.')[1]
         print("The decoded file is,", file)
         self.files[file_name] = {}
         self.files[file_name][file + '_0'+ '.txt'] = [sender_ip, sender_port]
-
+        # Send the file to all other peers
         chunk_number = 1
         for receiver_peer_id, (receiver_ip, receiver_port) in self.peers.items():
             if receiver_ip != sender_ip or receiver_port != sender_port:
@@ -92,13 +94,8 @@ class Tracker:
         conn.sendall(response.encode())
         print("Sent response")
 
+    # This method lists the files available on the tracker
     def _list_files(self, conn):
         print("Got list request")
         conn.sendall(str(list(self.files.keys())[0]).encode())
         print("Sent files") 
-
-if __name__ == "__main__":
-    tracker_host = "172.20.10.5"  # Replace with the actual IP address of the tracker machine
-    tracker_port = 12346
-    tracker = Tracker(tracker_host, tracker_port)
-    tracker.start()

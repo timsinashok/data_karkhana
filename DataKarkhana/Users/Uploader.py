@@ -4,14 +4,15 @@ import os
 class uploader:
     def __init__(self):
         pass
-
+    
+    #This method sends a file to a peer
     def send_file_chunk(self, file_name, client_socket):
         chunk_size = 1024
         dest_path = 'downloads'
         file_path = os.path.join(dest_path, file_name)
         with open(file_path, 'rb') as file:
             while True:
-                chunk = file.read(chunk_size)
+                chunk = file.read(chunk_size)# Read the file in chunks
                 if not chunk:
                     break
                 client_socket.send(chunk)
@@ -19,7 +20,7 @@ class uploader:
 
     def request_file_from_peer(self, peer_ip, peer_port, filename):
         try:
-            peer_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            peer_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)# Connect to the peer
             peer_socket.connect((peer_ip, peer_port))
 
             request_message = f"SEND_DATA {filename}"
@@ -41,7 +42,7 @@ class uploader:
 
     def send_file_to_peer(self, peer_socket, filename):
         try:
-            file_path = f"/Users/yaghyesh/dev/data_karkhana/DataKarkhana/downloads/{filename}"
+            file_path = f"downloads/{filename}"
             with open(file_path, 'rb') as file:
                 file_data = file.read()
                 peer_socket.sendall(file_data)
