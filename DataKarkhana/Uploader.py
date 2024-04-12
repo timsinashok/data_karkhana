@@ -7,7 +7,7 @@ class uploader:
 
     def send_file_chunk(self, file_name, client_socket):
         chunk_size = 1024
-        file_path = f"/Users/yaghyesh/dev/fold/{file_name}"
+        file_path = f"downloads/{file_name}"
         with open(file_path, 'rb') as file:
             while True:
                 chunk = file.read(chunk_size)
@@ -40,7 +40,7 @@ class uploader:
 
     def send_file_to_peer(self, peer_socket, filename):
         try:
-            file_path = f"/Users/yaghyesh/dev/fold/{filename}"
+            file_path = f"downloads/{filename}"
             with open(file_path, 'rb') as file:
                 file_data = file.read()
                 peer_socket.sendall(file_data)
@@ -49,7 +49,7 @@ class uploader:
 
     def divide_file_into_chunks(self, file_path, num_chunks):
         chunks = []
-        dest_path = '/Users/yaghyesh/dev/fold/'
+        dest_path = 'downloads'
         file_size = os.path.getsize(file_path)
         chunk_size = int(file_size / num_chunks) + 1
         with open(file_path, 'rb') as file:
@@ -70,7 +70,7 @@ class uploader:
             with open(os.path.join(dest_path, f"{filename}_{index}.txt"), 'wb') as chunk_file:
                 chunk_file.write(chunk)
 
-    def send_file(self, file_path, peer_id, host, port, tracker_host, tracker_port):
+    def send_file(self, peer_id, host, port, tracker_host, tracker_port, file_path = "test.txt"):
         file_name = os.path.basename(file_path)
         tracker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         tracker_socket.connect((tracker_host, tracker_port))
@@ -164,13 +164,3 @@ class uploader:
             print("An error occurred:", e)
 
 
-if __name__ == "__main__":
-    alice_instance = uploader()
-    sender_host = "172.20.10.11"
-    sender_port = 12345
-    tracker_host = "172.20.10.5"
-    tracker_port = 12346
-    file_path = "test.txt"
-
-    alice_instance.send_file(file_path, "alice", sender_host, sender_port, tracker_host, tracker_port)
-    alice_instance.connect_and_receive_response("alice", sender_host, sender_port+1, tracker_host, tracker_port)
