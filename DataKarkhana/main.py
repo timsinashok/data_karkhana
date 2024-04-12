@@ -1,8 +1,8 @@
 import sys
-import data_karkhana.DataKarkhana.Users.Tracker as Tracker
-import data_karkhana.DataKarkhana.Users.Peer as Peer
-import data_karkhana.DataKarkhana.Users.Uploader as Uploader
-import data_karkhana.DataKarkhana.Users.Downloader as Downloader
+from Users import Tracker
+from Users import Peer
+from Users import Uploader
+from Users import Downloader
 import socket
 
 def main():
