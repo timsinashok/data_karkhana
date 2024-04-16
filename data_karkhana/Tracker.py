@@ -17,14 +17,11 @@ class Tracker:
 
         while True:
             print("Current peers:", self.peers)
-            print("Current files: \n\n", self.files)
 
-            print("Before message received")
             conn, addr = self.tracker_socket.accept()
             print(f"Connection established with {addr}")
 
             data = conn.recv(1024).decode()
-            print(f"Received data: {data}")
 
             if data.startswith("REGISTER"):
                 self._register_peer(data)
@@ -83,11 +80,8 @@ class Tracker:
         self.files[file_name][file + "_0." + extension][1] += 1
 
     def _lookup_file(self, data, conn):
-        print("Got lookup request")
-        print(data)
-        print("Handling lookup request")
+        print("Handling Lookup Request")
         file_name = data.split()[1]
-        print(file_name)
         response = f"PEERS {self.files[file_name]}"
         conn.sendall(response.encode())
         print("Sent response")
